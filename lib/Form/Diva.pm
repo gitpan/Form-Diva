@@ -1,43 +1,48 @@
 use strict;
 use warnings;
 no warnings 'uninitialized';
+
 package Form::Diva;
 
 # use 5.014;
 
-our $VERSION = '0.01'; # VERSION
-
-# ABSTRACT: Form Generation Helper
+our $VERSION = '0.0103';    # VERSION
 
 =head1 NAME
  
-Form::Diva Form Generation Helper
+Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
  
-version 0.01
+version 0.0103
  
 =head1 SYNOPSIS
  
 Generate Form Label and Input Tags from a simple data structure.
-Simplify form code in your views without replacing it with a lot of even
+Simplify form code in your views without replacing it without a lot of even
 uglier Perl Code in your Controller. 
 
-=pod
+Drastically reduce form clutter in your View Templates with small Data Structures in your Controller or Model!
 
-FormMap hash of components of a form
+=head1 DESCRIPTION
 
-FormData a structure of data that is presented to Form::Diva for translation
+Create a new instance of Form::Diva from an array_ref of hash_refs describing each field of your form. The most common elements have a single letter abbreviation to reduce typing.
 
-FormObjects an object returned by Form::Diva containing both the original FormData
-plus formlabel and forminput items that Diva generated.
+Return a similar structure of the label and input elements ready for inclusion in a web page by your templating system.
+
+=head1 USAGE
+
+
+
+=head1 Bugs
+
+
 
 =cut
 
 sub new {
     my $class = shift;
     my $self  = {@_};
-    unless ( $self->{form_name} ) { die "form_name is mandatory" }
     bless $self, $class;
     $self->{class}   = $class;
     $self->{FormMap} = &_expandshortcuts( $self->{form} );
@@ -61,6 +66,8 @@ sub _expandshortcuts {
                     = delete $formfield->{$tag};
             }
         }
+        unless ( $formfield->{type} ) { $formfield->{type} = 'text'  }
+        unless ( $formfield->{name} ) { die "fields must have names" }     
     }
     return $FormMap;
 }
@@ -86,12 +93,13 @@ sub _field_bits {
     $out{input_class} = $self->_class_input($field_ref);
     $out{name}        = qq!name="$in{name}"!;
     $out{id}          = $in{id} ? qq!id="$in{id}"! : qq!id="$in{name}"!;
+
     if ( lc( $in{type} ) eq 'textarea' ) {
         $out{type}     = 'textarea';
         $out{textarea} = 1;
     }
-    else { 
-        $out{type} = qq!type="$in{type}"!; 
+    else {
+        $out{type}     = qq!type="$in{type}"!;
         $out{textarea} = 0;
     }
     if ($data) {
@@ -117,8 +125,7 @@ sub _label {
     my $label_class = $self->{label_class};
     my $label_tag   = $field->{label} || ucfirst($fname);
     return
-          qq|<LABEL for="$fname" class="$label_class" |
-        . qq|form="$self->{form_name}">|
+          qq|<LABEL for="$fname" class="$label_class">|
         . qq|$label_tag</LABEL>|;
 }
 
@@ -129,12 +136,12 @@ sub _input {
     my %B     = $self->_field_bits( $field, $data );
     my $input = '';
     if ( $B{textarea} ) {
-        $input = qq|<TEXTAREA $B{name} $B{id} form="$self->{form_name}"
+        $input = qq|<TEXTAREA $B{name} $B{id}"
         $B{input_class} $B{placeholder} $B{extra} >$B{rawvalue}</TEXTAREA>|;
     }
     else {
-        $input .= qq|<INPUT $B{type} $B{name} $B{id} form="$self->{form_name}"
-        $B{input_class} $B{value} $B{placeholder} $B{extra} >|;
+        $input .= qq|<INPUT $B{type} $B{name} $B{id}"
+        $B{input_class} $B{placeholder} $B{extra} $B{value} >|;
     }
     $input =~ s/\s+/ /g;     # remove extra whitespace.
     $input =~ s/\s+>/>/g;    # cleanup space before closing >
@@ -158,7 +165,6 @@ sub _radiocheck {            # field, input_class, data;
         else         { $field->{default} }
         }
         : undef;
-    if ( $field->{disabled} ) { $extra .= ' disabled ' }
     foreach my $val ( @{ $field->{values} } ) {
         my ( $value, $v_lab ) = ( split( /\:/, $val ), $val );
         my $checked = '';
@@ -178,10 +184,14 @@ sub generate {
     foreach my $field ( @{ $self->{FormMap} } ) {
         my $input = undef;
         if ( $field->{type} eq 'radio' || $field->{type} eq 'checkbox' ) {
-            $input = $self->_radiocheck( $field, $self->_class_input($field) );
+            $input = $self->_radiocheck(
+                $field,
+                $self->_class_input($field),
+                $data->{ $field->{name} }
+            );
         }
         else {
-            $input = $self->_input( $field, $data);
+            $input = $self->_input( $field, $data );
         }
         $input =~ s/  +/ /g;     # remove extra whitespace.
         $input =~ s/\s+>/>/g;    # cleanup space before closing >
@@ -198,7 +208,7 @@ sub generate {
 
 =head1 AUTHOR
 
-John Karr, C<< <brainbuz at brainbuz.org> >>
+John Karr, C<brainbuz at brainbuz.org>
 
 =head1 BUGS
 
