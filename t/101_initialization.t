@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More;
+use Test::More 1.00;
 #use 5.014;
 use Storable qw(dclone);
 use Test::Exception 0.32;
@@ -33,6 +33,18 @@ dies_ok(
     input_class => 'form-control',
     form        => [{qw /t email l Email /}, ],
     ) }, 'Dies: Not providing a Field Name is Fatal' );
+
+dies_ok(
+    sub { my $baddiva = Form::Diva->new(
+    input_class => 'form-control',
+    form        => [{qw /t email n Email /}, ],
+    ) }, 'Dies: Not providing label_class is fatal' );
+
+dies_ok(
+    sub { my $baddiva = Form::Diva->new(
+    label_class => 'form-control',
+    form        => [{qw /t email n Email /}, ],
+    ) }, 'Dies: Not providing input_class is fatal' );
 
 my $newform = &Form::Diva::_expandshortcuts( $diva1->{form} );
 is( $newform->[0]{label}, 'Full Name', 'record 0 label is Full Name' );

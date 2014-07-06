@@ -1,50 +1,16 @@
 use strict;
 use warnings;
-no warnings 'uninitialized';
+no  warnings 'uninitialized';
 
 package Form::Diva;
-
-# use 5.014;
-
-our $VERSION = '0.0103';    # VERSION
-
-=head1 NAME
- 
-Form::Diva - Generate HTML5 form label and input fields
-
-=head1 VERSION
- 
-version 0.0103
- 
-=head1 SYNOPSIS
- 
-Generate Form Label and Input Tags from a simple data structure.
-Simplify form code in your views without replacing it without a lot of even
-uglier Perl Code in your Controller. 
-
-Drastically reduce form clutter in your View Templates with small Data Structures in your Controller or Model!
-
-=head1 DESCRIPTION
-
-Create a new instance of Form::Diva from an array_ref of hash_refs describing each field of your form. The most common elements have a single letter abbreviation to reduce typing.
-
-Return a similar structure of the label and input elements ready for inclusion in a web page by your templating system.
-
-=head1 USAGE
-
-
-
-=head1 Bugs
-
-
-
-=cut
-
+$Form::Diva::VERSION = '0.03';
 sub new {
     my $class = shift;
     my $self  = {@_};
     bless $self, $class;
     $self->{class}   = $class;
+    unless( $self->{input_class}) { die 'input_class is required.' }
+    unless( $self->{label_class}) { die 'label_class is required.' }
     $self->{FormMap} = &_expandshortcuts( $self->{form} );
     return $self;
 }
@@ -54,8 +20,8 @@ sub new {
 sub _expandshortcuts {
     my %DivaShortMap = (
         qw /
-            n name t type i id e extra l label p placeholder
-            d default v values value values c class/
+            n name t type i id e extra x extra l label p placeholder
+            d default v values c class/
     );
     my %DivaLongMap = map { $DivaShortMap{$_}, $_ } keys(%DivaShortMap);
     my $FormMap = shift;
@@ -206,6 +172,159 @@ sub generate {
 
 1;
 
+=head1 NAME
+ 
+Form::Diva - Generate HTML5 form label and input fields
+
+=head1 VERSION
+
+version 0.03
+
+=head1 SYNOPSIS
+ 
+Generate Form Label and Input Tags from a simple data structure.
+Simplify form code in your views without replacing it without a lot of even
+uglier Perl Code in your Controller. 
+
+Drastically reduce form clutter in your View Templates with small Data Structures.
+
+=head1 DESCRIPTION
+
+Create a new instance of Form::Diva from an array_ref of hash_refs describing each field of your form. The most common attributes have a single letter abbreviation to reduce typing.
+
+Return a similar structure of the label and input attributes ready for inclusion in a web page by your templating system.
+
+=head1 USAGE
+
+ use Form::Diva;
+
+ my $diva = Form::Diva->new(
+    label_class => 'col-sm-3 control-label',
+    input_class => 'form-control',
+    form        => [
+        { n => 'name', t => 'text', p => 'Your Name', l => 'Full Name' },
+        { name => 'phone', type => 'tel', extra => 'required' },
+        { qw / n email t email l Email c form-email placeholder doormat/},
+        { name => 'myradio', type => 'radio', default => 1,
+           values => [ "1:Yes", "2:No", "3:Maybe" ] },   
+    ],
+ );
+
+ my $fields = $diva->generate;
+ my $filledfields = $diva->generate( $hashref_of_data );
+
+Once you send this to your stash or directly to the templating system the form might look like:
+
+  <form class="form-horizontal well col-md-8" role="form"
+   method="post" action="/form1" name="DIVA1" >  
+
+  <div class="form-group">
+In Template Toolkit:
+  [% FOREACH field IN fields %] {
+    [% field.label %]
+    <div class="col-sm-8">
+        [% field.input %]
+    </div>
+  [% END %]
+Or in Mojo::Template
+  % foreach my $field (@$fields) {
+    <%== $field->{'label'} %>
+    <div class="col-sm-8">
+        <%== $field->{'input'} %>
+    </div>
+ % }
+
+ </div>
+
+ <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-8">
+      <input type="submit" class="btn btn-large btn-primary" 
+      name="submit" value="submit_me" >&nbsp;
+    </div>
+ </div>
+ </form>
+
+=head1 METHODS
+
+=head2 new
+
+Create a new object from a Data Structure ().
+
+=head2 generate
+
+When called without arguments returns the blank form with placeholders and value set to default or null if there is no default.
+
+When provided an optional hashref it sets values based on the hashref and suppresses placeholder. 
+
+The data returned is in the form of an array reference with a hash reference for the label and input attributes.
+
+=head2 spawn
+
+Not yet implemented. The same as generate but specify which fields to include and or change field order.
+
+=head1 The Form::Diva Data Structure
+
+ { label_class => 'some class in your css',
+   input_class => 'some class in your css',
+   form        => [
+        { name => 'some_field_name', ... },
+        ...
+   ],
+ }
+
+=head2 label_class, input_class
+
+Specify the contents the label's class attribute and the input's class attribute. The input_class can be over-ridden for a single field by using the c/class attribute in a field definition.
+
+=head2 form
+
+Form::Diva knows about the most frequently needed attributes in HTML5 label and input tags. The attribute extra is provided to handle valueless attributes like required and attributes that are not explicitly supported by Form::Diva. Each supported tag has a single character shortcut. When no values in a field definition require spaces the shortcuts make it extremely compact to describe a field using qw/. 
+
+The only required value in a field definition is name. When not specified type defaults to text. 
+
+Multivalued fields are not currently supported, but may be in the future.
+
+Supported attributes and their shortcuts
+
+ c       class        over-ride input_class for this field
+ d       default      sets value for an empty form
+ e,x     extra        any other attribute(s)
+ i       id           defaults to name
+ l       label        defaults to ucfirst(name)
+ n       name         field name -- required
+ p       placeholder  placeholder to show in an empty form
+ t       type         checkbox, radio, textarea or any input types
+                      type defaults to text input type
+ v       values       for radio and checkbox inputs only
+
+=head2 extra attribute
+
+The contents of extra are placed verbatim in the input tag. Use for HTML5 attributes that have no value such as disabled and any of the other attributes you may wish to use in your forms that have not been implemented, you will need to type out attribute="something" if it is not valueluess.
+
+=head3 Common Attributes with no Value
+
+B<disabled>, B<readonly>, B<required>
+
+Should be placed in the extra field when needed.
+
+=head2 TextArea, Radio Button and CheckBox
+
+TextArea fields are handled the same as the text type. Radio Buttons and CheckBoxes are very similar to each other, and take an extra attribute 'values'. Form::Diva does not currently support multi-valued Radio Buttons and CheckBoxes, if a record's data has multiple values only one will be selected in the form.
+
+=head3 values
+
+For CheckBoxes the values attribute is just the values of the check boxes. If value is set and matches one of the values it will be checked. 
+
+  { type => 'checkbox',
+    name => 'mycheckbox',
+    values => [ 'Miami', 'Chicago', 'London', 'Paris' ] }
+
+For RadioButtons the values attribute is a number and text seperated by a colon. When the form is submitted just the number will be returned.
+
+  { t => 'radio',
+    n => 'myradio',
+    v => [ '1:New York', '2:Philadelphia', '3:Boston' ] }
+
 =head1 AUTHOR
 
 John Karr, C<brainbuz at brainbuz.org>
@@ -244,4 +363,3 @@ along with this program.  If not, see L<http://www.gnu.org/licenses/>.
 =cut
 
 1;
-
