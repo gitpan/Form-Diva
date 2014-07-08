@@ -1,17 +1,18 @@
 use strict;
 use warnings;
-no  warnings 'uninitialized';
+no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.03';
+$Form::Diva::VERSION = '0.04';
 sub new {
     my $class = shift;
     my $self  = {@_};
     bless $self, $class;
-    $self->{class}   = $class;
-    unless( $self->{input_class}) { die 'input_class is required.' }
-    unless( $self->{label_class}) { die 'label_class is required.' }
-    $self->{FormMap} = &_expandshortcuts( $self->{form} );
+    $self->{class} = $class;
+    unless ( $self->{input_class} ) { die 'input_class is required.' }
+    unless ( $self->{label_class} ) { die 'label_class is required.' }
+    ( $self->{FormMap}, $self->{FormHash} )
+        = &_expandshortcuts( $self->{form} );
     return $self;
 }
 
@@ -24,7 +25,8 @@ sub _expandshortcuts {
             d default v values c class/
     );
     my %DivaLongMap = map { $DivaShortMap{$_}, $_ } keys(%DivaShortMap);
-    my $FormMap = shift;
+    my $FormHash    = {};
+    my $FormMap     = shift;
     foreach my $formfield ( @{$FormMap} ) {
         foreach my $tag ( keys %{$formfield} ) {
             if ( $DivaShortMap{$tag} ) {
@@ -32,10 +34,11 @@ sub _expandshortcuts {
                     = delete $formfield->{$tag};
             }
         }
-        unless ( $formfield->{type} ) { $formfield->{type} = 'text'  }
-        unless ( $formfield->{name} ) { die "fields must have names" }     
+        unless ( $formfield->{type} ) { $formfield->{type} = 'text' }
+        unless ( $formfield->{name} ) { die "fields must have names" }
+        $FormHash->{ $formfield->{name} } = $formfield;
     }
-    return $FormMap;
+    return ( $FormMap, $FormHash );
 }
 
 # given a field returns either the default field class="string"
@@ -90,8 +93,7 @@ sub _label {
     my $fname       = $field->{name};
     my $label_class = $self->{label_class};
     my $label_tag   = $field->{label} || ucfirst($fname);
-    return
-          qq|<LABEL for="$fname" class="$label_class">|
+    return qq|<LABEL for="$fname" class="$label_class">|
         . qq|$label_tag</LABEL>|;
 }
 
@@ -106,7 +108,7 @@ sub _input {
         $B{input_class} $B{placeholder} $B{extra} >$B{rawvalue}</TEXTAREA>|;
     }
     else {
-        $input .= qq|<INPUT $B{type} $B{name} $B{id}"
+        $input .= qq|<INPUT $B{type} $B{name} $B{id}
         $B{input_class} $B{placeholder} $B{extra} $B{value} >|;
     }
     $input =~ s/\s+/ /g;     # remove extra whitespace.
@@ -178,7 +180,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
  
@@ -307,9 +309,17 @@ B<disabled>, B<readonly>, B<required>
 
 Should be placed in the extra field when needed.
 
-=head2 TextArea, Radio Button and CheckBox
+=head2 TextArea
 
-TextArea fields are handled the same as the text type. Radio Buttons and CheckBoxes are very similar to each other, and take an extra attribute 'values'. Form::Diva does not currently support multi-valued Radio Buttons and CheckBoxes, if a record's data has multiple values only one will be selected in the form.
+TextArea fields are handled the same as the text type. 
+
+=head2 Select
+
+The select input type didn't make it into the initial release but is at the top of the list for features to implement.
+
+=head2 Radio Button and CheckBox
+
+Radio Buttons and CheckBoxes are very similar to each other, and take an extra attribute 'values'. Form::Diva does not currently support multi-valued Radio Buttons and CheckBoxes, if a record's data has multiple values only one will be selected in the form.
 
 =head3 values
 
