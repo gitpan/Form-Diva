@@ -7,7 +7,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.05
+version 0.0501
 
 =head1 SYNOPSIS
  
@@ -83,13 +83,15 @@ Create a new object from a Data Structure ().
 
 When called without arguments returns the blank form with placeholders and value set to default or null if there is no default.
 
-When provided an optional hashref it sets values based on the hashref and suppresses placeholder. 
+When provided an optional hashref of data it sets values based on the hashref and suppresses placeholder. 
 
 The data returned is in the form of an array reference with a hash reference for the label and input attributes.
 
+A second optional hashref may be passed to override the values list for select, checkbox and radio button inputs, see below.
+
 =head2 clone
 
-Copy a Form::Diva object optionally modifiying some of the values in the copy. This is useful if you have several similar forms, define a form diva object with all of the fields, then make some copies for the shorter forms.
+Copy a Form::Diva object optionally modifiying some of the values in the copy. This is useful if you have several similar forms, define a form diva object with all of the fields, then make copies for the shorter forms.
 
  my $newdiva = $diva->clone({ 
     neworder => [ qw / A B c D E /], });
@@ -182,6 +184,10 @@ For Select inputs there are two forms of values. If the value itself and the lab
   values => [ 'item1:Pineapple', 'item2:Georgia Peach', 'item3:Naval Orange']
 
 When using the first form of values the label is not CamelCased or otherwise changed, if you want that you'll need to use the second form. 
+
+=head3 Over-Riding Values
+
+It is possible to override values by passing an extra argument to generate. The override argument is a hashref { field_name => [ values ...]}. It is even possible to create your initial object with an empty values lists and pass a list every time you generate the form.
 
 =head1 AUTHOR
 
