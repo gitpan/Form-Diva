@@ -20,15 +20,15 @@ my %WriteMakefileArgs = (
   "LICENSE" => "gpl",
   "NAME" => "Form::Diva",
   "PREREQ_PM" => {
+    "Storable" => 0,
     "strict" => 0,
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
-    "Storable" => 0,
     "Test::Exception" => "0.32",
     "Test::More" => "1.00"
   },
-  "VERSION" => "0.04",
+  "VERSION" => "0.05",
   "test" => {
     "TESTS" => "t/*.t"
   }
