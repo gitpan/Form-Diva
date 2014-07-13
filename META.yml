@@ -3,20 +3,20 @@ abstract: 'Generate HTML5 form label and input fields'
 author:
   - 'John Karr <brainbuz@brainbuz.org>'
 build_requires:
-  Test::Exception: 0.32
-  Test::More: 1.00
+  Test::Exception: '0.32'
+  Test::More: '1.00'
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
+  ExtUtils::MakeMaker: '6.30'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.132830'
+generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Form-Diva
 requires:
-  Storable: 0
-  perl: 5.006
-  strict: 0
-  warnings: 0
-version: 0.0501
+  Storable: '0'
+  perl: '5.006'
+  strict: '0'
+  warnings: '0'
+version: '0.06'

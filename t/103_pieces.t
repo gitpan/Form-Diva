@@ -18,7 +18,7 @@ my $diva1 = Form::Diva->new(
         {   name  => 'phone',
             type  => 'tel',
             extra => 'required',
-            id    => 'not name',
+            id    => 'phonefield_setid',
         },
         {qw / n email t email l Email c form-email placeholder doormat/},
         {   name    => 'our_id',
@@ -52,6 +52,38 @@ is( $diva1->_class_input( $diva1->{form}[1] ), 'class="form-control"',
     'with field that uses default class' );
 is( $diva1->_class_input( $diva1->{form}[2] ), 'class="form-email"',
     'with field that uses over-ride class' );
+note( 'testing that id prefers a set id and defaults to formdiva_%fieldname');
+is( $diva1->{FormHash}{email}{id}, 'formdiva_email', 
+    'Email field\'s id was created for us by form diva as formdiva_email' );
+is( $diva1->{FormHash}{phone}{id}, 'phonefield_setid', 
+    'Phone field id is as specified');
 
+note( 'Testing _option_id');
 
+my @testoptionid = ( #  [ id value expected ]
+    [ qw / carform pinto carform_pinto / ],
+    [ qw / carform volvo carform_volvo / ],
+    [ qw / truckform GMC truckform_gmc / ],
+    [ qw / carform Pinto carform_pinto2 / ],
+    [ 'carform', 'Ford Pinto', 'carform_ford_pinto' ],
+    [ qw / truckform Dodge truckform_dodge / ],
+    [ qw / carform pinto carform_pinto3 / ],
+    );
+
+my %results = ();
+$diva1->_clear_id_uq;
+
+foreach my $test ( @testoptionid ) {
+    my $formid = $test->[0];
+    my $optionvalue = $test->[1];
+    my $expected = "id=\"$test->[2]\"";
+    my $optid = $diva1->_option_id( $formid, $optionvalue );
+    $results{ $optid } = 1 ;
+    is( $optid, $expected, "$formid $optionvalue => $expected");
+}
+
+is ( scalar( keys %results), scalar( @testoptionid),
+    "All ids generated were unique: \n" .
+    "The number of unique results is the same as the number of tests: " .
+    scalar( @testoptionid) );
 done_testing;
