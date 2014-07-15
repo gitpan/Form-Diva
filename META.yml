@@ -3,6 +3,8 @@ abstract: 'Generate HTML5 form label and input fields'
 author:
   - 'John Karr <brainbuz@brainbuz.org>'
 build_requires:
+  Carp::Always: '0'
+  Data::Printer: '0'
   Test::Exception: '0.32'
   Test::More: '1.00'
 configure_requires:
@@ -19,4 +21,4 @@ requires:
   perl: '5.006'
   strict: '0'
   warnings: '0'
-version: '0.06'
+version: '0.0650'

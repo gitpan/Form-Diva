@@ -29,7 +29,6 @@ my $diva1 = Form::Diva->new(
             placeholder => 'Type some stuff here',
         },
         { name => 'trivial', class => 'ignorable' },
-        {qw/ n secret t hidden /},
     ],
 );
 
@@ -50,7 +49,7 @@ my $name_no_data_tr = $diva1->_input( $fields[0], undef );
 
 # There seems like extra space in some of the qr//, this is deliberate
 # to ensure that there is space between elements.
-note("Input Element for name_no_data_tr\n$name_no_data_tr");
+# note("Input Element for name_no_data_tr\n$name_no_data_tr");
 like(
     $name_no_data_tr,
     qr/^<INPUT type="text"/,
@@ -71,27 +70,27 @@ unlike( $name_no_data_tr, qr/"\w""/,
     'Bug Test: should never see two quotes like this: "\w""' );
 
 my $name_data1_tr = $diva1->_input( $fields[0], $data1 );
-note("Input Element for name_data1_tr: $name_data1_tr");
+#note("Input Element for name_data1_tr: $name_data1_tr");
 unlike( $name_data1_tr, qr/placeholder/,
     'Input with data has no placeholder' );
 like( $name_data1_tr, qr/ value="Baloney"/, 'Value set: value="Baloney" ' );
 
 my $ourid_no_data_tr = $diva1->_input( $fields[3] );
-note("Input Element for Our_ID no Data $ourid_no_data_tr");
+#note("Input Element for Our_ID no Data $ourid_no_data_tr");
 like( $ourid_no_data_tr, qr/ type="number" /, 'input type is number' );
 like( $ourid_no_data_tr, qr/value="57"/,      'Value defaulted: value="57"' );
 like( $ourid_no_data_tr, qr/disabled/,        'Extra specified disabled' );
 
 my $ourid_no_data2_tr = $diva1->_input( $fields[3], $data2 );
-note("Input Element for Our_ID Data2 $ourid_no_data2_tr");
+#note("Input Element for Our_ID Data2 $ourid_no_data2_tr");
 like( $ourid_no_data2_tr, qr/value="91"/,
     'Value is not default but actual value: value="91"' );
 
 my $textarea_tr = $diva1->_input( $fields[4], );
-note("Input Element for textarea $textarea_tr");
+#note("Input Element for textarea $textarea_tr");
 like( $textarea_tr, qr/^<TEXTAREA/, 'tag is TEXTAREA' );
 my $textarea_data2_tr = $diva1->_input( $fields[4], $data2 );
-note("Input Element for textarea with data2 $textarea_data2_tr");
+#note("Input Element for textarea with data2 $textarea_data2_tr");
 like(
     $textarea_data2_tr,
     qr/>I typed things in here!<\/TEXTAREA>/,
@@ -108,20 +107,5 @@ like( $trivial_tr, qr/class="ignorable"/,
     'class over-ride set class to ignorable' );
 unlike( $trivial_tr, qr/form-control/,
     'the default class isnt in the input' );
-
-TODO: {
-    local $TODO = 'working on hidden input';
-    my $hidden_tr = $diva1->_input( $fields[6], );
-    is( $hidden_tr,
-        '<INPUT type="hidden" name="secret" id="formdiva_secret" value="">',
-        'Hidden Input field'
-    );
-    my $hidden_data2_tr = $diva1->_input( $fields[6], $data2 );
-    is( $hidden_data2_tr,
-        '<INPUT type="hidden" name="secret" id="formdiva_secret" value="I won&rsquo;t tell">',
-        'Hidden Input field with data'
-    );
-
-}
 
 done_testing;
