@@ -18,7 +18,7 @@ t/160_hidden.t
 t/170_checkboxes.t
 t/180_select.t
 t/201_generate.t
-t/211_hidden.pl
+t/211_hidden.t
 t/300_clone.t
 t/author-critic.t
 t/release-pod-coverage.t
