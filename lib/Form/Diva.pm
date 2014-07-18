@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.08';
+$Form::Diva::VERSION = '0.09';
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable qw(dclone);
@@ -127,7 +127,7 @@ sub _field_bits {
     $out{extra} = $in{extra};    # extra is taken literally
     $out{input_class} = $self->_class_input($field_ref);
     $out{name}        = qq!name="$in{name}"!;
-    $out{id}          = $in{id} ? qq!id="$in{id}"! : qq!id="$in{name}"!;
+    $out{id}          = $in{id} ? qq!id="$in{id}"! : qq!id="formdiva_$in{name}"!;
 
     if ( lc( $in{type} ) eq 'textarea' ) {
         $out{type}     = 'textarea';
@@ -155,6 +155,7 @@ sub _field_bits {
 }
 
 sub _label {
+
     # an id does not get put in label because the spec does not say either
     # the id attribute or global attributes are supported.
     # http://www.w3.org/TR/html5/forms.html#the-label-element
@@ -247,7 +248,7 @@ sub _option_input {    # field, input_class, data;
             my ( $value, $v_lab ) = ( split( /\:/, $val ), $val );
             my $idf = $self->_option_id( $field->{id}, $value );
             my $selected = '';
-            if    ( $data    eq $value ) { $selected = 'selected ' }
+            if    ( $data eq $value )    { $selected = 'selected ' }
             elsif ( $default eq $value ) { $selected = 'selected ' }
             $output
                 .= qq| <option value="$value" $idf $selected>$v_lab</option>\n|;
@@ -259,7 +260,7 @@ sub _option_input {    # field, input_class, data;
             my ( $value, $v_lab ) = ( split( /\:/, $val ), $val );
             my $idf = $self->_option_id( $field->{id}, $value );
             my $checked = '';
-            if    ( $data    eq $value ) { $checked = 'checked ' }
+            if    ( $data eq $value )    { $checked = 'checked ' }
             elsif ( $default eq $value ) { $checked = 'checked ' }
             $output
                 .= qq!<input type="$field->{type}" $input_class $extra name="$field->{name}" $idf value="$value" $checked>$v_lab<br>\n!;
@@ -308,6 +309,39 @@ sub hidden {
         $output .= $self->_input_hidden( $field, $data ) . "\n";
     }
     return $output;
+}
+
+sub datavalues {
+    my $self = shift;
+    my $data = shift ;
+    my $skipempty = 0;
+    my $moredata = 0;
+    for (@_ ){
+        if ( $_ eq 'skipempty') { $skipempty =1 }
+        if ( $_ eq 'moredata')   { $moredata =1 }
+    }
+    my @datavalues = ();
+PLAINLOOP:
+    foreach my $field ( @{ $self->{FormMap} } ) {
+        if ( $skipempty ) {
+            unless ( $data->{$field->{name}} ) { next PLAINLOOP }
+        }
+        my %row = ( 
+            name  => $field->{name},
+            type  => $field->{type},
+            value => $data->{$field->{name}}, );
+        $row{label} = $field->{label} || ucfirst( $field->{name} );
+        $row{id}    = $field->{id} ? $field->{id} : 'formdiva_' . $field->{name}; 
+        if ( $moredata ) {
+            $row{extra} = $field->{extra};
+            $row{values} = $field->{values};
+            $row{default} = $field->{default};
+            $row{placeholder} = $field->{placeholder};
+            $row{class} = $field->{class} || $self->{input_class};
+        }
+        push @datavalues, \%row ;
+    }
+    return \@datavalues;
 }
 
 1;
