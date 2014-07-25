@@ -7,7 +7,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 

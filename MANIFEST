@@ -18,6 +18,7 @@ t/160_hidden.t
 t/170_checkboxes.t
 t/180_select.t
 t/201_generate.t
+t/202_generate_options.t
 t/211_hidden.t
 t/221_datavalues.t
 t/300_clone.t
