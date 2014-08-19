@@ -17,7 +17,11 @@ meta-spec:
 name: Form-Diva
 requires:
   Storable: '0'
-  perl: '5.006'
+  perl: '5.008'
   strict: '0'
   warnings: '0'
-version: '0.10'
+resources:
+  bugtracker: https://github.com/brainbuz/form-diva/issues
+  homepage: https://github.com/brainbuz/form-diva
+  repository: https://github.com/brainbuz/form-diva.git
+version: '0.11'

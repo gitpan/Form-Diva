@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.10';
+$Form::Diva::VERSION = '0.11';
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable qw(dclone);
@@ -350,3 +350,31 @@ PLAINLOOP:
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Form::Diva - Generate HTML5 form label and input fields
+
+=head1 VERSION
+
+version 0.11
+
+=head1 AUTHOR
+
+John Karr <brainbuz@brainbuz.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by John Karr.
+
+This is free software, licensed under:
+
+  The GNU General Public License, Version 3, June 2007
+
+=cut

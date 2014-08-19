@@ -1,0 +1,52 @@
+{
+   "abstract" : "Generate HTML5 form label and input fields",
+   "author" : [
+      "John Karr <brainbuz@brainbuz.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640",
+   "license" : [
+      "gpl_3"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Form-Diva",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Storable" : "0",
+            "perl" : "5.008",
+            "strict" : "0",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::Deep" : "0.112",
+            "Test::Exception" : "0.32",
+            "Test::More" : "1.001003"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/brainbuz/form-diva/issues"
+      },
+      "homepage" : "https://github.com/brainbuz/form-diva",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/brainbuz/form-diva.git",
+         "web" : "https://github.com/brainbuz/form-diva"
+      }
+   },
+   "version" : "0.11"
+}
+

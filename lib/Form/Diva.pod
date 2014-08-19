@@ -1,5 +1,11 @@
+# PODNAME: Form::Diva
+# ABSTRACT: Generate HTML5 form label and input fields
 
-=pod 
+__END__
+
+=pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -7,25 +13,17 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
 Generate Form Label and Input Tags from a simple data structure.
 Simplify form code in your views without replacing it without a lot of even
 uglier Perl Code in your Controller. 
 
-Drastically reduce form clutter in your View Templates with small Data Structures.
-
 =head1 PROJECT STATUS IS BETA
 
 Most of Form::Diva is unlikely to change, but hasn't been road-tested enough to know for sure. While you are encouraged to start using Form::Diva, please be aware that there is a small possibility of changes that break compatibility.
-
-=head1 DESCRIPTION
-
-Create a new instance of Form::Diva from an array_ref of hash_refs describing each field of your form. The most common attributes have a single letter abbreviation to reduce typing.
-
-Return a similar structure of the label and input attributes ready for inclusion in a web page by your templating system.
 
 =head1 USAGE
 
@@ -261,7 +259,7 @@ John Karr, C<brainbuz at brainbuz.org>
 
 =head1 BUGS
 
-Please report any bugs or feature requests through the web interface at L<https://bitbucket.org/brainbuz/formdiva/issues>. I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests through the web interface at L<https://github.com/brainbuz/form-diva/issues>. I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
@@ -287,5 +285,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see L<http://www.gnu.org/licenses/>.
+
+=head1 AUTHOR
+
+John Karr <brainbuz@brainbuz.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by John Karr.
+
+This is free software, licensed under:
+
+  The GNU General Public License, Version 3, June 2007
 
 =cut
