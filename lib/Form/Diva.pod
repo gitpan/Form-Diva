@@ -13,9 +13,15 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
+
+=head1 NAME Form::Diva
+
+=head1 VERSION
+
+version 0.12
 
 Generate Form Label and Input Tags from a simple data structure.
 Simplify form code in your views without replacing it without a lot of even
@@ -215,7 +221,7 @@ For RadioButtons the values attribute is a number and text seperated by a colon.
 
 For Select inputs there are two forms of values. If the value itself and the label are the same then values is just a list of those values which will also be used as the label. The second form requires the value and the label to be seperated by a colon.
 
-  values => [ qw /pineapple persimmon nectarine ]
+  values => [ qw / pineapple persimmon nectarine / ]
   or 
   values => [ 'item1:Pineapple', 'item2:Georgia Peach', 'item3:Naval Orange']
 

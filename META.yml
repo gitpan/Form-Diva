@@ -7,16 +7,16 @@ build_requires:
   Test::Exception: '0.32'
   Test::More: '1.001003'
 configure_requires:
-  ExtUtils::MakeMaker: '6.30'
+  ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142060'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
 name: Form-Diva
 requires:
-  Storable: '0'
+  Storable: '2.51'
   perl: '5.008'
   strict: '0'
   warnings: '0'
@@ -24,4 +24,4 @@ resources:
   bugtracker: https://github.com/brainbuz/form-diva/issues
   homepage: https://github.com/brainbuz/form-diva
   repository: https://github.com/brainbuz/form-diva.git
-version: '0.11'
+version: '0.12'
