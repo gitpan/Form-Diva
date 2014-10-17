@@ -13,19 +13,16 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 DESCRIPTION
-
-=head1 NAME Form::Diva
-
-=head1 VERSION
-
-version 0.12
 
 Generate Form Label and Input Tags from a simple data structure.
 Simplify form code in your views without replacing it without a lot of even
 uglier Perl Code in your Controller. 
+
+# weirdness with podweaver also creating a NAME, but autoversion wants it.
+#=head1 NAME Form::Diva
 
 =head1 PROJECT STATUS IS BETA
 

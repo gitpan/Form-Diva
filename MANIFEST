@@ -25,3 +25,4 @@ t/202_generate_options.t
 t/211_hidden.t
 t/221_datavalues.t
 t/300_clone.t
+t/301_dbic_result.t

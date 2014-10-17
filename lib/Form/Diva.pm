@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.12';
+$Form::Diva::VERSION = '0.13'; # TRIAL
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable 2.51 qw(dclone);
@@ -274,10 +274,20 @@ sub _option_input {    # field, input_class, data;
     return $output;
 }
 
+# check if $data is a hashref or a dbic result row and inflate it.
+sub _checkdatadbic {
+    my $data = shift ;
+    if ( ref $data eq 'HASH' ) { return $data }
+    elsif ( eval {$data->isa( 'DBIx::Class::Row' )} ) {
+        return { $data->get_inflated_columns } ;
+    }
+    else { return undef }
+}
+
 sub generate {
-    my $self      = shift;
-    my $data      = shift;
-    my $overide   = shift;
+    my $self      = shift @_ ;
+    my $data      = _checkdatadbic( shift @_ );
+    my $overide   = shift@_ ;
     my @generated = ();
     $self->_clear_id_uq;    # needs to be empty when form generation starts.
     foreach my $field ( @{ $self->{FormMap} } ) {
@@ -363,7 +373,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 AUTHOR
 
