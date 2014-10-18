@@ -3,6 +3,7 @@ abstract: 'Generate HTML5 form label and input fields'
 author:
   - 'John Karr <brainbuz@brainbuz.org>'
 build_requires:
+  Data::Printer: '0'
   Test::Deep: '0.112'
   Test::Exception: '0.32'
   Test::More: '1.001003'
@@ -24,4 +25,4 @@ resources:
   bugtracker: https://github.com/brainbuz/form-diva/issues
   homepage: https://github.com/brainbuz/form-diva
   repository: https://github.com/brainbuz/form-diva.git
-version: '0.13'
+version: '0.14'

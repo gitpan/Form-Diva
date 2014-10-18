@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.13'; # TRIAL
+$Form::Diva::VERSION = '0.14'; # TRIAL
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable 2.51 qw(dclone);
@@ -24,10 +24,10 @@ sub _field_once {
     my %hash   = ();
     foreach my $field (@fields) {
         if ( $hash{ $field->{name} } ) {
-            die "$field->{name} would appear more than once or " .
-            "is in both hidden and visible field lists. Not " .
-            "only would this cause strange behaviour in your form " .
-            "but it could internally corrupt Form::Diva";
+            die "$field->{name} would appear more than once or "
+                . "is in both hidden and visible field lists. Not "
+                . "only would this cause strange behaviour in your form "
+                . "but it could internally corrupt Form::Diva";
         }
         else { $hash{ $field->{name} } = 1; }
     }
@@ -81,8 +81,8 @@ sub _expandshortcuts {
             d default v values c class /
     );
     my %DivaLongMap = map { $DivaShortMap{$_}, $_ } keys(%DivaShortMap);
-    my $FormHash    = {};
-    my $FormMap     = shift;
+    my $FormHash = {};
+    my $FormMap = shift;    # data passed to new
     foreach my $formfield ( @{$FormMap} ) {
         foreach my $tag ( keys %{$formfield} ) {
             if ( $DivaShortMap{$tag} ) {
@@ -132,7 +132,7 @@ sub _field_bits {
     $out{extra} = $in{extra};    # extra is taken literally
     $out{input_class} = $self->_class_input($field_ref);
     $out{name}        = qq!name="$in{name}"!;
-    $out{id}          = $in{id} ? qq!id="$in{id}"! : qq!id="formdiva_$in{name}"!;
+    $out{id} = $in{id} ? qq!id="$in{id}"! : qq!id="formdiva_$in{name}"!;
 
     if ( lc( $in{type} ) eq 'textarea' ) {
         $out{type}     = 'textarea';
@@ -276,18 +276,18 @@ sub _option_input {    # field, input_class, data;
 
 # check if $data is a hashref or a dbic result row and inflate it.
 sub _checkdatadbic {
-    my $data = shift ;
+    my $data = shift;
     if ( ref $data eq 'HASH' ) { return $data }
-    elsif ( eval {$data->isa( 'DBIx::Class::Row' )} ) {
-        return { $data->get_inflated_columns } ;
+    elsif ( eval { $data->isa('DBIx::Class::Row') } ) {
+        return { $data->get_inflated_columns };
     }
-    else { return undef }
+    else { return {} }
 }
 
 sub generate {
-    my $self      = shift @_ ;
+    my $self      = shift @_;
     my $data      = _checkdatadbic( shift @_ );
-    my $overide   = shift@_ ;
+    my $overide   = shift @_;
     my @generated = ();
     $self->_clear_id_uq;    # needs to be empty when form generation starts.
     foreach my $field ( @{ $self->{FormMap} } ) {
@@ -309,8 +309,9 @@ sub generate {
         $input =~ s/\s+>/>/g;    # cleanup space before closing >
         push @generated,
             {
-            label => $self->_label($field),
-            input => $input
+            label   => $self->_label($field),
+            input   => $input,
+            comment => $field->{comment},
             };
     }
     return \@generated;
@@ -327,34 +328,37 @@ sub hidden {
 }
 
 sub datavalues {
-    my $self = shift;
-    my $data = shift ;
+    my $self      = shift;
+    my $data      = shift;
     my $skipempty = 0;
-    my $moredata = 0;
-    for (@_ ){
-        if ( $_ eq 'skipempty') { $skipempty =1 }
-        if ( $_ eq 'moredata')   { $moredata =1 }
+    my $moredata  = 0;
+    for (@_) {
+        if ( $_ eq 'skipempty' ) { $skipempty = 1 }
+        if ( $_ eq 'moredata' )  { $moredata  = 1 }
     }
     my @datavalues = ();
 PLAINLOOP:
     foreach my $field ( @{ $self->{FormMap} } ) {
-        if ( $skipempty ) {
-            unless ( $data->{$field->{name}} ) { next PLAINLOOP }
+        if ($skipempty) {
+            unless ( $data->{ $field->{name} } ) { next PLAINLOOP }
         }
-        my %row = ( 
+        my %row = (
             name  => $field->{name},
             type  => $field->{type},
-            value => $data->{$field->{name}}, );
+            value => $data->{ $field->{name} },
+            comment => $field->{comment}, 
+        );
         $row{label} = $field->{label} || ucfirst( $field->{name} );
-        $row{id}    = $field->{id} ? $field->{id} : 'formdiva_' . $field->{name}; 
-        if ( $moredata ) {
-            $row{extra} = $field->{extra};
-            $row{values} = $field->{values};
-            $row{default} = $field->{default};
+        $row{id} = $field->{id} ? $field->{id} : 'formdiva_' . $field->{name};
+        if ($moredata) {
+            $row{extra}       = $field->{extra};
+            $row{values}      = $field->{values};
+            $row{default}     = $field->{default};
             $row{placeholder} = $field->{placeholder};
-            $row{class} = $field->{class} || $self->{input_class};
+            $row{class}       = $field->{class} || $self->{input_class};
+
         }
-        push @datavalues, \%row ;
+        push @datavalues, \%row;
     }
     return \@datavalues;
 }
@@ -373,7 +377,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 AUTHOR
 

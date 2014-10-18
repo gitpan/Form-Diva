@@ -12,7 +12,7 @@ my $diva1 = Form::Diva->new(
     form_name => 'diva1',
     form        => [
         { n => 'name', t => 'text', p => 'Your Name', l => 'Full Name' },
-        { name => 'phone', type => 'tel', extra => 'required' },
+        { name => 'phone', type => 'tel', extra => 'required', comment => 'phoney phooey' },
         {qw / n email t email l Email c form-email placeholder doormat/},
         { name => 'our_id', type => 'number', extra => 'disabled' },
     ],
@@ -38,6 +38,14 @@ like( $processed1->[1]{input}, qr/value=""/,
 like( $processed1->[2]{input}, qr/value="dinner\@food\.food"/, 
     'Row 2 has a value like the email address.');
 
+is( $processed1->[0]{comment}, undef, 'first field has no comment' );
+TODO: {
+    local $TODO ='adding comment';
+    use Data::Printer;
+  #  p( $processed1);
+is( $processed1->[1]{comment}, 
+    'phoney phooey', 'second field has comment of \'phoney phooey\'' );
+}
 my @html_types = (
     {qw / n color t color l Colour /},
     {qw / n date   t date   l Date /},

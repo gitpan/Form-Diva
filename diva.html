@@ -4,7 +4,7 @@
 <head>
 <title></title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:brainbuz@qianna.(none)" />
+<link rev="made" href="mailto:brainbuz@petra.bz" />
 </head>
 
 <body>
@@ -71,10 +71,6 @@
   <li><a href="#LICENSE-AND-COPYRIGHT">LICENSE AND COPYRIGHT</a></li>
 </ul>
 
-<p># =head1 NAME</p>
-
-<p># Form::Diva - Generate HTML5 form label and input fields</p>
-
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
 <p>Generate Form Label and Input Tags from a simple data structure. Simplify form code in your views without replacing it without a lot of even uglier Perl Code in your Controller.</p>
@@ -100,7 +96,8 @@
  );
 
  my $fields = $diva-&gt;generate;
- my $filledfields = $diva-&gt;generate( $hashref_of_data );</code></pre>
+ my $filledfields = $diva-&gt;generate( $hashref_of_data );
+ my $filledfields = $diva-&gt;generate( $DBIx::Class::Row );</code></pre>
 
 <p>Once you send this to your stash or directly to the templating system the form might look like:</p>
 
@@ -143,11 +140,11 @@ Or in Mojo::Template
 
 <p>When called without arguments returns the blank form with placeholders and value set to default or null if there is no default.</p>
 
-<p>When provided an optional hashref of data it sets values based on the hashref and suppresses placeholder.</p>
+<p>When provided an optional hashref of data it sets values based on the hashref and suppresses placeholder. A DBIx::Class::Row may be used in place of the hashref.</p>
 
 <p>A second optional hashref may be passed to override the values list for select, checkbox and radio button inputs, see below.</p>
 
-<p>The data returned is in the form of an array reference where each element of the array is two hashreferences: label and input.</p>
+<p>The data returned is in the form of an array reference where each element of the array three hashreferences: label, input and comment.</p>
 
 <h2 id="hidden">hidden</h2>
 
@@ -217,7 +214,7 @@ Or in Mojo::Template
 
 <p>Form::Diva knows about the most frequently needed attributes in HTML5 label and input tags. The attribute extra is provided to handle valueless attributes like required and attributes that are not explicitly supported by Form::Diva. Each supported tag has a single character shortcut. When no values in a field definition require spaces the shortcuts make it extremely compact to describe a field using qw/.</p>
 
-<p>The only required value in a field definition is name. When not specified type defaults to text.</p>
+<p>The only required value in a field definition is name. When not specified type defaults to text. Comments may be added to fields and are returned by generate as a seperate hash element. Comments on hidden fields are not returned by the hidden method.</p>
 
 <p>Multivalued fields (checkboxes, select) are not currently supported, but may be in the future.</p>
 
@@ -232,7 +229,9 @@ Or in Mojo::Template
  p       placeholder  placeholder to show in an empty form
  t       type         checkbox, radio, textarea or any input types
                       type defaults to text input type
- v       values       for radio and checkbox inputs only</code></pre>
+ v       values       for radio and checkbox inputs only
+
+         comment      comment has no shortcut</code></pre>
 
 <h2 id="extra-attribute">extra attribute</h2>
 
@@ -272,7 +271,7 @@ Or in Mojo::Template
 
 <p>For Select inputs there are two forms of values. If the value itself and the label are the same then values is just a list of those values which will also be used as the label. The second form requires the value and the label to be seperated by a colon.</p>
 
-<pre><code>  values =&gt; [ qw /pineapple persimmon nectarine ]
+<pre><code>  values =&gt; [ qw / pineapple persimmon nectarine / ]
   or 
   values =&gt; [ &#39;item1:Pineapple&#39;, &#39;item2:Georgia Peach&#39;, &#39;item3:Naval Orange&#39;]</code></pre>
 
@@ -316,7 +315,7 @@ Or in Mojo::Template
 
 <h1 id="BUGS">BUGS</h1>
 
-<p>Please report any bugs or feature requests through the web interface at <a href="https://bitbucket.org/brainbuz/formdiva/issues">https://bitbucket.org/brainbuz/formdiva/issues</a>. I will be notified, and then you&#39;ll automatically be notified of progress on your bug as I make changes.</p>
+<p>Please report any bugs or feature requests through the web interface at <a href="https://github.com/brainbuz/form-diva/issues">https://github.com/brainbuz/form-diva/issues</a>. I will be notified, and then you&#39;ll automatically be notified of progress on your bug as I make changes.</p>
 
 <h1 id="SUPPORT">SUPPORT</h1>
 
