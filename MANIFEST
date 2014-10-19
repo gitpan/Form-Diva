@@ -10,6 +10,7 @@ dist.ini
 diva.html
 lib/Form/Diva.pm
 lib/Form/Diva.pod
+pod2htmd.tmp
 t/101_initialization.t
 t/102_fieldbits.t
 t/103_pieces.t
@@ -24,7 +25,6 @@ t/202_generate_options.t
 t/211_hidden.t
 t/221_datavalues.t
 t/300_clone.t
-t/301_dbic_result.t
 t/301_dbic_row.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

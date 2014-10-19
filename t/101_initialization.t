@@ -79,8 +79,4 @@ is( $form2->[0]{name}, 'something',
 is( $form2->[0]{type}, 'text', 
     'Second form: field type defaulted to text');
 
-my $fh = $diva1->{FormMap};
-use Data::Printer;
-p( $fh );
-
 done_testing();

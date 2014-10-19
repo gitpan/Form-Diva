@@ -13,7 +13,6 @@
 
 <ul id="index">
   <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
-  <li><a href="#PROJECT-STATUS-IS-BETA">PROJECT STATUS IS BETA</a></li>
   <li><a href="#USAGE">USAGE</a></li>
   <li><a href="#METHODS">METHODS</a>
     <ul>
@@ -75,10 +74,6 @@
 
 <p>Generate Form Label and Input Tags from a simple data structure. Simplify form code in your views without replacing it without a lot of even uglier Perl Code in your Controller.</p>
 
-<h1 id="PROJECT-STATUS-IS-BETA">PROJECT STATUS IS BETA</h1>
-
-<p>Most of Form::Diva is unlikely to change, but hasn&#39;t been road-tested enough to know for sure. While you are encouraged to start using Form::Diva, please be aware that there is a small possibility of changes that break compatibility.</p>
-
 <h1 id="USAGE">USAGE</h1>
 
 <pre><code> use Form::Diva;
@@ -90,7 +85,7 @@
         { n =&gt; &#39;name&#39;, t =&gt; &#39;text&#39;, p =&gt; &#39;Your Name&#39;, l =&gt; &#39;Full Name&#39; },
         { name =&gt; &#39;phone&#39;, type =&gt; &#39;tel&#39;, extra =&gt; &#39;required&#39; },
         { qw / n email t email l Email c form-email placeholder doormat/},
-        { name =&gt; &#39;myradio&#39;, type =&gt; &#39;radio&#39;, default =&gt; 1,
+        { name =&gt; &#39;myradio&#39;, type =&gt; &#39;radio&#39;, default =&gt; 1, 
            values =&gt; [ &quot;1:Yes&quot;, &quot;2:No&quot;, &quot;3:Maybe&quot; ] },   
     ],
  );
@@ -231,7 +226,8 @@ Or in Mojo::Template
                       type defaults to text input type
  v       values       for radio and checkbox inputs only
 
-         comment      comment has no shortcut</code></pre>
+         comment      comment has no shortcut and is not included in the input tag
+                      or label and is instead returned as a seperate element by generate.</code></pre>
 
 <h2 id="extra-attribute">extra attribute</h2>
 

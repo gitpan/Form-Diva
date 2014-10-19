@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.14'; # TRIAL
+$Form::Diva::VERSION = '0.15'; # TRIAL
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable 2.51 qw(dclone);
@@ -143,7 +143,7 @@ sub _field_bits {
         $out{textarea} = 0;
         if ( $in{type} eq 'hidden' ) { $out{hidden} = 1 }
     }
-    if ($data) {
+    if (keys %{$data}) {
         $out{placeholder} = '';
         $out{rawvalue} = $data->{$fname} || '';
     }
@@ -231,15 +231,17 @@ sub _option_id {
 sub _option_input {    # field, input_class, data;
     my $self           = shift;
     my $field          = shift;    # field definition from FormMap or FormHash
-    my $data           = shift;    # scalar data for this form field
+    my $data           = shift;    # data for this form field
     my $replace_fields = shift;    # valuelist to use instead of default
+    my $datavalue      = $data->{ $field->{name} };
     my $output         = '';
     my $input_class = $self->_class_input($field);
     my $extra       = $field->{extra} || "";
-    my $default     = $field->{default}
+    # in case default is 0, it must be checked in a string context
+    my $default     = length ($field->{default}) 
         ? do {
-        if   ($data) {undef}
-        else         { $field->{default} }
+        if   ( keys %{$data} ) {undef}
+        else { $field->{default} }
         }
         : undef;
     my @values
@@ -253,8 +255,8 @@ sub _option_input {    # field, input_class, data;
             my ( $value, $v_lab ) = ( split( /\:/, $val ), $val );
             my $idf = $self->_option_id( $field->{id}, $value );
             my $selected = '';
-            if    ( $data eq $value )    { $selected = 'selected ' }
-            elsif ( $default eq $value ) { $selected = 'selected ' }
+            if    ( $datavalue eq $value )  { $selected = 'selected ' }
+            elsif ( $default eq $value )    { $selected = 'selected ' }
             $output
                 .= qq| <option value="$value" $idf $selected>$v_lab</option>\n|;
         }
@@ -265,8 +267,10 @@ sub _option_input {    # field, input_class, data;
             my ( $value, $v_lab ) = ( split( /\:/, $val ), $val );
             my $idf = $self->_option_id( $field->{id}, $value );
             my $checked = '';
-            if    ( $data eq $value )    { $checked = 'checked ' }
-            elsif ( $default eq $value ) { $checked = 'checked ' }
+            if    ( $datavalue eq $value )    { 
+                $checked = q !checked="checked" ! }
+            elsif ( $default eq $value ) { 
+                $checked = q !checked="checked" ! }
             $output
                 .= qq!<input type="$field->{type}" $input_class $extra name="$field->{name}" $idf value="$value" $checked>$v_lab<br>\n!;
         }
@@ -298,7 +302,7 @@ sub generate {
         {
             $input = $self->_option_input(
                 $field,
-                $data->{ $field->{name} },
+                $data,
                 $overide->{ $field->{name} },
             );
         }
@@ -377,7 +381,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 AUTHOR
 

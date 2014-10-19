@@ -13,7 +13,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 DESCRIPTION
 
@@ -32,7 +32,7 @@ uglier Perl Code in your Controller.
         { n => 'name', t => 'text', p => 'Your Name', l => 'Full Name' },
         { name => 'phone', type => 'tel', extra => 'required' },
         { qw / n email t email l Email c form-email placeholder doormat/},
-        { name => 'myradio', type => 'radio', default => 1,
+        { name => 'myradio', type => 'radio', default => 1, 
            values => [ "1:Yes", "2:No", "3:Maybe" ] },   
     ],
  );
@@ -174,7 +174,8 @@ Supported attributes and their shortcuts
                       type defaults to text input type
  v       values       for radio and checkbox inputs only
 
-         comment      comment has no shortcut
+         comment      comment has no shortcut and is not included in the input tag
+                      or label it is instead returned as a seperate element by generate.
 
 =head2 extra attribute
 

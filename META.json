@@ -36,7 +36,7 @@
       },
       "test" : {
          "requires" : {
-            "Data::Printer" : "0",
+            "Carp::Always" : "0",
             "Test::Deep" : "0.112",
             "Test::Exception" : "0.32",
             "Test::More" : "1.001003"
@@ -55,6 +55,6 @@
          "web" : "https://github.com/brainbuz/form-diva"
       }
    },
-   "version" : "0.14"
+   "version" : "0.15"
 }
 
