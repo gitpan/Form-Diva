@@ -3,7 +3,7 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.15'; # TRIAL
+$Form::Diva::VERSION = '0.15';
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable 2.51 qw(dclone);

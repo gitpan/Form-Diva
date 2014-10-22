@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use Storable qw(dclone);
 use_ok('Form::Diva');
-use Carp::Always;
+# use Carp::Always;
 
 =pod Test Select Inputs
 

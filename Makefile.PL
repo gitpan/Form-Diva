@@ -25,7 +25,6 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
-    "Carp::Always" => 0,
     "Test::Deep" => "0.112",
     "Test::Exception" => "0.32",
     "Test::More" => "1.001003"
@@ -38,7 +37,6 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "Carp::Always" => 0,
   "Storable" => "2.51",
   "Test::Deep" => "0.112",
   "Test::Exception" => "0.32",
