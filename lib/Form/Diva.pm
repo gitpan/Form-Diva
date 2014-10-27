@@ -3,7 +3,8 @@ use warnings;
 no warnings 'uninitialized';
 
 package Form::Diva;
-$Form::Diva::VERSION = '0.15';
+# use Data::Printer;
+$Form::Diva::VERSION = '0.16'; # TRIAL
 # ABSTRACT: Generate HTML5 form label and input fields
 
 use Storable 2.51 qw(dclone);
@@ -143,7 +144,7 @@ sub _field_bits {
         $out{textarea} = 0;
         if ( $in{type} eq 'hidden' ) { $out{hidden} = 1 }
     }
-    if (keys %{$data}) {
+    if (keys %{$data}) {   ;
         $out{placeholder} = '';
         $out{rawvalue} = $data->{$fname} || '';
     }
@@ -292,7 +293,9 @@ sub generate {
     my $self      = shift @_;
     my $data      = _checkdatadbic( shift @_ );
     my $overide   = shift @_;
-    my @generated = ();
+     my @generated = ();
+# p( $self->{FormHash} ) ; 
+# die "exit here\n";    
     $self->_clear_id_uq;    # needs to be empty when form generation starts.
     foreach my $field ( @{ $self->{FormMap} } ) {
         my $input = undef;
@@ -319,6 +322,23 @@ sub generate {
             };
     }
     return \@generated;
+}
+
+sub prefill {
+    my $self             = shift @_;
+    my $data             = _checkdatadbic( shift @_ );
+    my $overide          = shift @_;
+    my $oriFormMap      =  dclone $self->{FormMap};
+    foreach my $item ( @{$self->{FormMap }}) {
+        my $iname = $item->{name};
+        if ( $data->{$iname}) { 
+            $item->{default} = $data->{$iname};
+            delete $item->{placeholder} ;            
+        }
+    }         
+    my $generated        = $self->generate( undef, $overide);
+    $self->{FormMap} = dclone $oriFormMap;  
+    return $generated ;  
 }
 
 sub hidden {
@@ -381,7 +401,7 @@ Form::Diva - Generate HTML5 form label and input fields
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 AUTHOR
 

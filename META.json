@@ -4,7 +4,7 @@
       "John Karr <brainbuz@brainbuz.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142060",
+   "generated_by" : "Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.140640",
    "license" : [
       "gpl_3"
    ],
@@ -42,7 +42,7 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/brainbuz/form-diva/issues"
@@ -54,6 +54,6 @@
          "web" : "https://github.com/brainbuz/form-diva"
       }
    },
-   "version" : "0.15"
+   "version" : "0.16"
 }
 
