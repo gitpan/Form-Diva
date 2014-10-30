@@ -7,7 +7,6 @@ META.yml
 Makefile.PL
 README
 dist.ini
-diva.html
 lib/Form/Diva.pm
 lib/Form/Diva.pod
 t/101_initialization.t
